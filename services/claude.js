@@ -60,6 +60,8 @@ RESPONDA SEMPRE EM JSON (sem texto fora do JSON):
     content: m.conteudo
   }));
 
+  console.log('[claude] chamando API via axios, key length:', process.env.ANTHROPIC_API_KEY?.length);
+
   const response = await axios.post(
     'https://api.anthropic.com/v1/messages',
     {
@@ -79,6 +81,8 @@ RESPONDA SEMPRE EM JSON (sem texto fora do JSON):
       }
     }
   );
+
+  console.log('[claude] resposta OK, status:', response.status);
 
   const texto = response.data.content[0].text;
 
