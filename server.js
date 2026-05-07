@@ -27,6 +27,36 @@ app.get('/debug-env', (req, res) => {
   });
 });
 
+// Teste direto da API Anthropic - remover apos corrigir
+app.get('/test-anthropic', async (req, res) => {
+  const axios = require('axios');
+  try {
+    const response = await axios.post(
+      'https://api.anthropic.com/v1/messages',
+      {
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'Oi' }]
+      },
+      {
+        headers: {
+          'x-api-key': process.env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json'
+        }
+      }
+    );
+    res.json({ sucesso: true, resposta: response.data.content[0].text });
+  } catch (error) {
+    res.json({
+      sucesso: false,
+      status: error.response?.status,
+      erro: error.response?.data,
+      mensagem: error.message
+    });
+  }
+});
+
 app.use('/webhook', webhookRouter);
 
 const PORT = process.env.PORT || 3000;
