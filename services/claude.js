@@ -1,7 +1,5 @@
 const Anthropic = require('@anthropic-ai/sdk');
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 function formatarCardapio(itens) {
   if (!itens || itens.length === 0) return 'Cardapio indisponivel no momento.';
 
@@ -61,6 +59,8 @@ RESPONDA SEMPRE EM JSON (sem texto fora do JSON):
     role: m.role,
     content: m.conteudo
   }));
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
