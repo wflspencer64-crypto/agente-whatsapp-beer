@@ -20,7 +20,7 @@ async function enviarMensagem(para, texto) {
     }
   );
 
-  console.log(`Mensagem enviada para ${para}`);
+  console.log(`Mensagem enviada para ${para}:`, JSON.stringify(response.data));
   return response.data;
 }
 
