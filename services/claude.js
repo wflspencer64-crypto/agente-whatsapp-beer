@@ -1,4 +1,4 @@
-const Anthropic = require('@anthropic-ai/sdk');
+const axios = require('axios');
 
 function formatarCardapio(itens) {
   if (!itens || itens.length === 0) return 'Cardapio indisponivel no momento.';
@@ -60,19 +60,27 @@ RESPONDA SEMPRE EM JSON (sem texto fora do JSON):
     content: m.conteudo
   }));
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const response = await axios.post(
+    'https://api.anthropic.com/v1/messages',
+    {
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: [
+        ...historico,
+        { role: 'user', content: mensagemUsuario }
+      ]
+    },
+    {
+      headers: {
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+      }
+    }
+  );
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1024,
-    system: systemPrompt,
-    messages: [
-      ...historico,
-      { role: 'user', content: mensagemUsuario }
-    ]
-  });
-
-  const texto = response.content[0].text;
+  const texto = response.data.content[0].text;
 
   try {
     const jsonMatch = texto.match(/\{[\s\S]*\}/);
