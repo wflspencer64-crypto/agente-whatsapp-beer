@@ -23,6 +23,9 @@ app.get('/debug-env', (req, res) => {
     tem_aspas: key.startsWith('"') || key.startsWith("'"),
     tem_espaco: key.startsWith(' ') || key.endsWith(' '),
     supabase_url_ok: !!process.env.SUPABASE_URL,
+    supabase_url_inicio: (process.env.SUPABASE_URL || '').substring(0, 30),
+    supabase_anon_key_length: (process.env.SUPABASE_ANON_KEY || '').length,
+    supabase_anon_key_inicio: (process.env.SUPABASE_ANON_KEY || '').substring(0, 20),
     meta_token_ok: !!process.env.META_ACCESS_TOKEN
   });
 });
