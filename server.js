@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const webhookRouter = require('./routes/webhook');
 
 const app = express();
@@ -58,6 +59,14 @@ app.get('/test-anthropic', async (req, res) => {
       mensagem: error.message
     });
   }
+});
+
+app.get('/privacy-policy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'privacy-policy.html'));
+});
+
+app.get('/terms-of-service', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'terms-of-service.html'));
 });
 
 app.use('/webhook', webhookRouter);
